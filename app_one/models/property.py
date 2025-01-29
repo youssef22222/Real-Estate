@@ -12,6 +12,7 @@ class Property(models.Model):
     leaving_area = fields.Integer()
     facades = fields.Integer()
     garden = fields.Boolean()
+    garage = fields.Boolean()
     garden_area = fields.Integer()
     garden_orientation=fields.Selection([
       #(name in database ,name that apear for the end user)

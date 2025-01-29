@@ -5,6 +5,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="postcode"/>
                 <field name="date_availability"/>
                 <field name="expected_price"/>
                 <field name="garden"/>
@@ -36,6 +37,7 @@
                             <field name="leaving_area"/>
                             <field name="facades"/>
                             <field name="garden"/>
+                            <field name="garage"/>
                             <field name="garden_area"/>
                             <field name="garden_orientation"/>
                         </group>
@@ -51,6 +53,24 @@
     <record id="property_action" model="ir.actions.act_window">
         <field name="name">property action</field>
         <field name="res_model">property</field>
+    </record>
+
+    <record id="property_view_search" model="ir.ui.view">
+        <field name="name">property search</field>
+        <field name="model">property</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="postcode"/>
+
+                <filter name="is_garden" string="With Garden" domain="[('garden','=',True)]"/>
+                <filter name="is_not_garden" string="Without Garden" domain="[('garden','!=',True)]"/>
+                <filter name="is_garage" string="With Garage" domain="[('garage','=',True)]"/>
+
+                <filter name="group_garden" string="Garden" context="{'group_by':'garden'}"/>
+                <filter name="group_garage" string="Garage" context="{'group_by':'garage'}"/>
+            </search>
+        </field>
     </record>
 
     <menuitem
