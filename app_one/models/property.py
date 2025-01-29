@@ -1,17 +1,22 @@
-from odoo import models,fields
+from string import digits
+
+from odoo import models,fields,api
+
+from odoo.exceptions import ValidationError
+
 
 class Property(models.Model):
     _name = 'property'
-    name = fields.Char()
+    name = fields.Char(required=True)
     description = fields.Text()
-    postcode = fields.Char()
+    postcode = fields.Char(required=True)
     date_availability = fields.Date()
-    expected_price = fields.Float()
+    expected_price = fields.Float(required=True) #this required validation does not affect the Float fields
     selling_price = fields.Float()
-    bedrooms = fields.Integer()
+    bedrooms = fields.Integer(required=True) #this required validation does not affect the Integer fields
     leaving_area = fields.Integer()
     facades = fields.Integer()
-    garden = fields.Boolean()
+    garden = fields.Boolean(required=True)#this required validation does not affect the Boolean fields
     garage = fields.Boolean()
     garden_area = fields.Integer()
     garden_orientation=fields.Selection([
@@ -21,3 +26,10 @@ class Property(models.Model):
         ("east","East"),
         ("west","West")
     ])
+
+
+    @api.constrains('bedrooms')
+    def _check_bedrooms_greater_than_zero(self):
+        for rec in self:
+            if rec.bedrooms <= 0:
+                raise ValidationError("Please add a valid number of bedrooms")
