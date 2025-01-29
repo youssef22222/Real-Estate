@@ -7,12 +7,12 @@ from odoo.exceptions import ValidationError
 
 class Property(models.Model):
     _name = 'property'
-    name = fields.Char(required=True)
+    name = fields.Char(required=True,default="New",size=20)
     description = fields.Text()
     postcode = fields.Char(required=True)
     date_availability = fields.Date()
     expected_price = fields.Float(required=True) #this required validation does not affect the Float fields
-    selling_price = fields.Float()
+    selling_price = fields.Float(digits=(0,5))
     bedrooms = fields.Integer(required=True) #this required validation does not affect the Integer fields
     leaving_area = fields.Integer()
     facades = fields.Integer()
@@ -25,7 +25,7 @@ class Property(models.Model):
         ("south","South"),
         ("east","East"),
         ("west","West")
-    ])
+    ],default="north")
 
 
     @api.constrains('bedrooms')
