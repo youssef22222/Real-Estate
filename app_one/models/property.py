@@ -1,8 +1,6 @@
-from string import digits
-
 from odoo import models,fields,api
-
 from odoo.exceptions import ValidationError
+
 
 
 class Property(models.Model):
@@ -27,6 +25,9 @@ class Property(models.Model):
         ("west","West")
     ],default="north")
 
+    _sql_constraints = [
+        ('unique_name', 'unique(name)','This name is Exist!'),
+    ]
 
     @api.constrains('bedrooms')
     def _check_bedrooms_greater_than_zero(self):
