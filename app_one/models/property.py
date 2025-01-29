@@ -10,7 +10,6 @@ class Property(models.Model):
     bedrooms = fields.Integer()
     leaving_area = fields.Integer()
     facades = fields.Integer()
-    garage = fields.Boolean()
     garden = fields.Boolean()
     garden_area = fields.Integer()
     garden_orientation=fields.Selection([
