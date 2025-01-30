@@ -34,3 +34,27 @@ class Property(models.Model):
         for rec in self:
             if rec.bedrooms <= 0:
                 raise ValidationError("Please add a valid number of bedrooms")
+
+    @api.model_create_multi
+    def create(self, vals):
+        result = super().create(vals)
+        #result = super(Property,self).create(vals) #also you can use this way for old versions of python
+        print("inside create method") #write your logic here, you can change in the result Ex. result.name = "property 100"
+        return result
+
+    @api.model
+    def _search(self, domain, offset=0, limit=None, order=None, access_rights_uid=None):
+        result = super()._search(domain, offset, limit, order, access_rights_uid)
+        print("inside _search method") #write your logic here
+        return result
+
+    def write(self, vals):
+        result = super().write(vals)
+        print("inside write method") #write you logic here
+        return result
+
+    def unlink(self):
+        result = super().unlink()
+        print("inside unlink method") #write your logic here
+        return result
+
