@@ -6,6 +6,7 @@
             <tree multi_edit="1" create="1" edit="1" delete="1">
                 <field name="name"/>
                 <field name="postcode"/>
+                <field name="owner_id"/>
                 <field name="date_availability"/>
                 <field name="expected_price"/>
                 <field name="garden"/>
@@ -34,6 +35,7 @@
                             <field name="bedrooms"/>
                         </group>
                         <group string="Additional Info.">
+                            <field name="owner_id"/>
                             <field name="leaving_area"/>
                             <field name="facades"/>
                             <field name="garden"/>
