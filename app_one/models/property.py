@@ -10,7 +10,8 @@ class Property(models.Model):
     postcode = fields.Char(required=True)
     date_availability = fields.Date()
     expected_price = fields.Float(required=True) #this required validation does not affect the Float fields
-    selling_price = fields.Float(digits=(0,5))
+    selling_price = fields.Float()
+    diff = fields.Float(compute="_compute_diff", store=True, readonly=False)
     bedrooms = fields.Integer(required=True) #this required validation does not affect the Integer fields
     leaving_area = fields.Integer()
     facades = fields.Integer()
@@ -81,7 +82,22 @@ class Property(models.Model):
         for rec in self:
             rec.state = 'sold'
 
+    #Here you can depend on any field in the model or depend on the related filed like owner_id.phone
+    @api.depends('selling_price','expected_price')
+    def _compute_diff(self):
+        for rec in self:
+            rec.diff = rec.expected_price - rec.selling_price
 
-
-
-
+    #Any change happen in the expected_price field in the UI this method will be called
+    @api.onchange('expected_price')
+    def _onchange_expected_price(self):
+        for rec in self:
+            if rec.expected_price < 0 :
+                return {
+                    "warning":{
+                        "title":"warning",
+                        "message":"Negative value not allowed for expected price",
+                        "type": "notification"},
+                }
+                #Note this warning will appear if the user enter negative value to expected_price field
+                #Even if the user enter negative value to expected_price field it will be saved in database

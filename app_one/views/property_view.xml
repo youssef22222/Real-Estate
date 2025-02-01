@@ -43,6 +43,7 @@
                             <field name="date_availability" required="1"/>
                             <field name="expected_price"/>
                             <field name="selling_price"/>
+                            <field name="diff"/>
                             <field name="bedrooms"/>
                             <field name="tag_ids" widget="many2many_tags"/>
                         </group>
