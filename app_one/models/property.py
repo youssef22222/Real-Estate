@@ -67,3 +67,21 @@ class Property(models.Model):
         print("inside unlink method") #write your logic here
         return result
 
+    def action_draft(self):
+        for rec in self:
+            rec.state = 'draft'
+
+    def action_pending(self):
+        for rec in self:
+            rec.write({
+                'state': 'pending',
+            })
+
+    def action_sold(self):
+        for rec in self:
+            rec.state = 'sold'
+
+
+
+
+
