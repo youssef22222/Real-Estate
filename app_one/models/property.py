@@ -25,6 +25,12 @@ class Property(models.Model):
         ("west","West")
     ],default="north")
 
+    state = fields.Selection([
+        ("draft","Draft"),
+        ("pending","Pending"),
+        ("sold","Sold"),
+    ],default="draft")
+
     owner_id =fields.Many2one('owner')
     tag_ids = fields.Many2many('tag')
 
