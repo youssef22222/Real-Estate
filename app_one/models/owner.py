@@ -9,3 +9,8 @@ class Owner(models.Model):
     address = fields.Char()
 
     property_ids = fields.One2many('property', 'owner_id')
+
+    _sql_constraints = [
+        # this constraint will not be applied if there is duplicate in the name column in the database
+        ('unique_name', 'unique(name)', 'This name is Exist!')
+    ]
