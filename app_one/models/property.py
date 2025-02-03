@@ -41,6 +41,8 @@ class Property(models.Model):
 
     tag_ids = fields.Many2many('tag')
 
+    line_ids = fields.One2many('property.line', 'property_id')
+
     _sql_constraints = [
         ('unique_name', 'unique(name)','This name is Exist!'),
     ]
@@ -107,3 +109,12 @@ class Property(models.Model):
                 }
                 #Note this warning will appear if the user enter negative value to expected_price field
                 #Even if the user enter negative value to expected_price field it will be saved in database
+
+
+    class PropertyLine(models.Model):
+        _name = 'property.line'
+
+        area = fields.Float()
+        description = fields.Char()
+
+        property_id = fields.Many2one('property')
