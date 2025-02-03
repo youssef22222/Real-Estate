@@ -5,12 +5,15 @@ from odoo.exceptions import ValidationError
 
 class Property(models.Model):
     _name = 'property'
+    _inherit = ['mail.thread', 'mail.activity.mixin'] #odoo support multi inheritance
+    _description = 'Property' # this name will appear in the chatter when create new property
+
     name = fields.Char(required=True,default="New",size=20)
-    description = fields.Text()
+    description = fields.Text(tracking=True)
     postcode = fields.Char(required=True)
-    date_availability = fields.Date()
+    date_availability = fields.Date(tracking=True)
     expected_price = fields.Float(required=True) #this required validation does not affect the Float fields
-    selling_price = fields.Float()
+    selling_price = fields.Float(tracking=True)
     diff = fields.Float(compute="_compute_diff", store=True, readonly=False)
     bedrooms = fields.Integer(required=True) #this required validation does not affect the Integer fields
     leaving_area = fields.Integer()
