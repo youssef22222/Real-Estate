@@ -35,6 +35,8 @@ class Property(models.Model):
         ("sold","Sold"),
     ],default="draft")
 
+    active = fields.Boolean(default=True)
+
     owner_id =fields.Many2one('owner')
     owner_address = fields.Char(related="owner_id.address", store=True) #store=True will store the field in the property table
     owner_phone = fields.Char(related="owner_id.phone", readonly=False) #readonly=False enable you to update this field form the property model

@@ -10,6 +10,7 @@
                 <field name="date_availability"/>
                 <field name="expected_price"/>
                 <field name="state"/>
+                <field name="active"/>
                 <field name="garden" optional="1"/>
                 <field name="garage" optional="1"/>
             </tree>
@@ -57,6 +58,7 @@
                             <field name="garage"/>
                             <field name="garden_area"/>
                             <field name="garden_orientation"/>
+                            <field name="active"/>
                         </group>
                         <group>
                             <field name="description" required="1"/>
