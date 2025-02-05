@@ -12,6 +12,8 @@ class Property(models.Model):
     description = fields.Text(tracking=True)
     postcode = fields.Char(required=True)
     date_availability = fields.Date(tracking=True)
+    expected_selling_date = fields.Date()
+    is_late = fields.Boolean()
     expected_price = fields.Float(required=True) #this required validation does not affect the Float fields
     selling_price = fields.Float(tracking=True)
     diff = fields.Float(compute="_compute_diff", store=True, readonly=False)
@@ -116,6 +118,12 @@ class Property(models.Model):
                 }
                 #Note this warning will appear if the user enter negative value to expected_price field
                 #Even if the user enter negative value to expected_price field it will be saved in database
+
+    def check_expected_selling_date(self):
+        properties = self.search([])
+        for property in properties:
+            if property.expected_selling_date and property.expected_selling_date < fields.date.today():
+                property.is_late = True
 
 
     class PropertyLine(models.Model):
