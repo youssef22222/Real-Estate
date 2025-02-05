@@ -33,6 +33,7 @@ class Property(models.Model):
         ("draft","Draft"),
         ("pending","Pending"),
         ("sold","Sold"),
+        ("closed","Closed"),
     ],default="draft")
 
     active = fields.Boolean(default=True)
@@ -91,6 +92,10 @@ class Property(models.Model):
     def action_sold(self):
         for rec in self:
             rec.state = 'sold'
+
+    def action_closed(self):
+        for rec in self:
+            rec.state = 'closed'
 
     #Here you can depend on any field in the model or depend on the related filed like owner_id.phone
     @api.depends('selling_price','expected_price')
