@@ -154,10 +154,10 @@ class Property(models.Model):
             result.ref = self.env["ir.sequence"].next_by_code("property_seq")
         return result
 
-    class PropertyLine(models.Model):
-        _name = 'property.line'
+class PropertyLine(models.Model):
+    _name = 'property.line'
 
-        area = fields.Float()
-        description = fields.Char()
+    area = fields.Float()
+    description = fields.Char()
 
-        property_id = fields.Many2one('property')
+    property_id = fields.Many2one('property')
