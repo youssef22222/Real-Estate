@@ -8,6 +8,7 @@ class Property(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin'] #odoo support multi inheritance
     _description = 'Property' # this name will appear in the chatter when create new property
 
+    ref = fields.Char(default="New",readonly=True)
     name = fields.Char(required=True,default="New",size=20)
     description = fields.Text(tracking=True)
     postcode = fields.Char(required=True)
@@ -145,6 +146,13 @@ class Property(models.Model):
         })) #owner(9,)
         print(self.env['owner'].search([])) #owner(1, 2, 3, 8, 9)
 
+
+    @api.model
+    def create(self,vals):
+        result = super().create(vals)
+        if result.ref == "New":
+            result.ref = self.env["ir.sequence"].next_by_code("property_seq")
+        return result
 
     class PropertyLine(models.Model):
         _name = 'property.line'
