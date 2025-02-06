@@ -84,20 +84,24 @@ class Property(models.Model):
 
     def action_draft(self):
         for rec in self:
+            rec.create_history_record(rec.state, 'draft')
             rec.state = 'draft'
 
     def action_pending(self):
         for rec in self:
+            rec.create_history_record(rec.state, 'pending')
             rec.write({
                 'state': 'pending',
             })
 
     def action_sold(self):
         for rec in self:
+            rec.create_history_record(rec.state, 'sold')
             rec.state = 'sold'
 
     def action_closed(self):
         for rec in self:
+            rec.create_history_record(rec.state, 'closed')
             rec.state = 'closed'
 
     #Here you can depend on any field in the model or depend on the related filed like owner_id.phone
@@ -153,6 +157,17 @@ class Property(models.Model):
         if result.ref == "New":
             result.ref = self.env["ir.sequence"].next_by_code("property_seq")
         return result
+
+    def create_history_record(self, old_state, new_state):
+        for rec in self:
+            rec.env['property.history'].create({
+                'user_id': self.env.uid,
+                'property_id': rec.id,
+                'old_state': old_state,
+                'new_state': new_state,
+                'datetime': fields.Datetime.now()
+            })
+
 
 class PropertyLine(models.Model):
     _name = 'property.line'
