@@ -26,6 +26,7 @@
             <form create="1" edit="1" delete="1">
                 <sheet>
                     <header>
+                        <button name="discover_env_object" type="object" class="btn-primary" string="Discover env object"/>
                         <button name="action_draft" type="object" class="btn-primary" string="Set To Draft"
                                 invisible="state == 'draft'"/>
                         <button name="action_pending" type="object" class="btn-secondary" string="Pending"

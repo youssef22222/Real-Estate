@@ -125,6 +125,26 @@ class Property(models.Model):
             if property.expected_selling_date and property.expected_selling_date < fields.date.today():
                 property.is_late = True
 
+    def discover_env_object(self):
+        print(self.env) #<odoo.api.Environment object at 0x743238187340>
+        print(self.env.user) #res.users(2,)
+        print(self.env.user.id) #2
+        print(self.env.user.login) # print user email => admin
+        print(self.env.uid) # print user id directly without user object => 2
+        print(self.env.company) #res.company(1,)
+        print(self.env.company.name) #YourCompany (name)
+        print(self.env.company.id) #1
+        print(self.env.company.street) #250 Executive Park Blvd, Suite 3400
+        print(self.env.context) #{'params': {'id': 1, 'cids': 1, 'menu_id': 538, 'action': 681, 'model': 'property', 'view_type': 'form'}, 'lang': 'en_US', 'tz': 'Europe/Brussels', 'uid': 2, 'allowed_company_ids': [1]}
+        print(self.env.cr) #<odoo.sql_db.Cursor object at 0x7953515d1a50>
+        print(self.env['owner']) #owner()
+        print(self.env['owner'].create({
+            "name":"Owner one",
+            "phone":"012345489",
+            "address":"Cairo",
+        })) #owner(9,)
+        print(self.env['owner'].search([])) #owner(1, 2, 3, 8, 9)
+
 
     class PropertyLine(models.Model):
         _name = 'property.line'
