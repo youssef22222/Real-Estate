@@ -158,15 +158,23 @@ class Property(models.Model):
             result.ref = self.env["ir.sequence"].next_by_code("property_seq")
         return result
 
-    def create_history_record(self, old_state, new_state):
+    def create_history_record(self, old_state, new_state, reason=None):
         for rec in self:
             rec.env['property.history'].create({
                 'user_id': self.env.uid,
                 'property_id': rec.id,
                 'old_state': old_state,
                 'new_state': new_state,
-                'datetime': fields.Datetime.now()
+                'datetime': fields.Datetime.now(),
+                'reason': reason if reason else "",
             })
+
+    def action_open_change_state_wizard_action(self):
+        if self.state != 'closed':
+            raise ValidationError("This action can work with the closed properties only")
+        action = self.env['ir.actions.actions']._for_xml_id('app_one.change_state_wizard_action')
+        action['context'] = {'default_property_id': self.id}
+        return action
 
 
 class PropertyLine(models.Model):

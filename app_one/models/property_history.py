@@ -12,3 +12,5 @@ class PropertyHistory(models.Model):
     new_state = fields.Char()
 
     datetime = fields.Datetime()
+
+    reason = fields.Char()
