@@ -1,6 +1,6 @@
 from odoo import models,fields,api
 from odoo.exceptions import ValidationError
-
+from datetime import timedelta
 
 
 class Property(models.Model):
@@ -38,6 +38,12 @@ class Property(models.Model):
         ("sold","Sold"),
         ("closed","Closed"),
     ],default="draft")
+
+    # this code will assign the same value to all records
+    # create_time = fields.Datetime(default=fields.Datetime.now())
+    # if you do not path lambda to the default attribute will assign the same value to all records
+    create_time = fields.Datetime(default=lambda self: fields.Datetime.now())
+    next_time = fields.Datetime(compute="_compute_next_time")
 
     active = fields.Boolean(default=True)
 
@@ -182,6 +188,12 @@ class Property(models.Model):
         action = self.env['ir.actions.actions']._for_xml_id('app_one.change_state_wizard_action')
         action['context'] = {'default_property_id': self.id}
         return action
+
+    @api.depends('create_time')
+    def _compute_next_time(self):
+        for rec in self:
+            if rec.create_time:
+                rec.next_time = rec.create_time + timedelta(hours=6)
 
 
 class PropertyLine(models.Model):
