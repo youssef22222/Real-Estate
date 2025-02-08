@@ -167,6 +167,13 @@ class Property(models.Model):
                 'new_state': new_state,
                 'datetime': fields.Datetime.now(),
                 'reason': reason if reason else "",
+                'line_ids': [(0, 0, {'description': line.description, 'area': line.area}) for line in rec.line_ids],
+
+                # this is the code if you do not use the magic tuple
+                # 'line_ids':[rec.env['property.history.line'].create({
+                #     'description': line.description,
+                #     'area': line.area,
+                # }).id for line in rec.line_ids]
             })
 
     def action_open_change_state_wizard_action(self):
