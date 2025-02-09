@@ -9,7 +9,7 @@ class Property(models.Model):
     _description = 'Property' # this name will appear in the chatter when create new property
 
     ref = fields.Char(default="New",readonly=True)
-    name = fields.Char(required=True,default="New",size=20)
+    name = fields.Char(required=True,default="New",size=20, translate=True)
     description = fields.Text(tracking=True)
     postcode = fields.Char(required=True)
     date_availability = fields.Date(tracking=True)
