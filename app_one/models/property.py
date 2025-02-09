@@ -19,7 +19,7 @@ class Property(models.Model):
     selling_price = fields.Float(tracking=True)
     diff = fields.Float(compute="_compute_diff", store=True, readonly=False)
     bedrooms = fields.Integer(required=True) #this required validation does not affect the Integer fields
-    leaving_area = fields.Integer()
+    leaving_area = fields.Integer(groups="app_one.property_manager_group")
     facades = fields.Integer()
     garden = fields.Boolean(required=True)#this required validation does not affect the Boolean fields
     garage = fields.Boolean()

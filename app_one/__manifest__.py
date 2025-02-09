@@ -6,6 +6,7 @@
     # these addons will be installed automatically once you install your addon
     'depends':['base','sale_management','account','mail','contacts'],
     'data':[
+        'security/security.xml',
         'security/ir.model.access.csv',
         'data/sequence.xml',
         'views/base_menu.xml',

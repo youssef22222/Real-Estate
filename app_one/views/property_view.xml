@@ -72,7 +72,7 @@
                             <field name="active" readonly="state == 'closed'"/>
                         </group>
                         <group>
-                            <field name="description" required="1"/>
+                            <field name="description" required="1" groups="app_one.property_manager_group"/>
                         </group>
                     </group>
                     <notebook>
