@@ -3,7 +3,7 @@
         <field name="name">property history tree</field>
         <field name="model">property.history</field>
         <field name="arch" type="xml">
-            <tree class="header_custom" create="0" edit="0" delete="0">
+            <tree class="header_custom" create="0">
                 <field name="user_id"/>
                 <field name="property_id"/>
                 <field name="old_state"/>
@@ -17,7 +17,7 @@
         <field name="name">property history form</field>
         <field name="model">property.history</field>
         <field name="arch" type="xml">
-            <form create="0" edit="0" delete="0">
+            <form create="0">
                 <sheet>
                     <group>
                         <group>
@@ -35,7 +35,7 @@
                     </group>
                     <notebook>
                         <page string="Bedrooms">
-                            <field name="line_ids" readonly="1">
+                            <field name="line_ids">
                                 <tree>
                                     <field name="description"/>
                                     <field name="area"/>
