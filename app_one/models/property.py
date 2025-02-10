@@ -195,6 +195,33 @@ class Property(models.Model):
             if rec.create_time:
                 rec.next_time = rec.create_time + timedelta(hours=6)
 
+    def discover_search_domain(self):
+        search_domain = []
+        print(self.env['property'].search(search_domain))
+        search_domain = [('name','=','property 1')]
+        print(self.env['property'].search(search_domain))
+        search_domain = [('name','!=','property 1')]
+        print(self.env['property'].search(search_domain))
+        search_domain = [('name','<','property 1')]
+        print(self.env['property'].search(search_domain))
+        search_domain = [('name','>=','property 1')]
+        print(self.env['property'].search(search_domain))
+        search_domain = [('name','in',('property 1','property 2'))]
+        print(self.env['property'].search(search_domain))
+        search_domain = [('name','not in',['property 1','property 2'])]
+        print(self.env['property'].search(search_domain))
+        ssearch_domain = [('name','like','property')] # Case-sensitive
+        print(self.env['property'].search(search_domain))
+        ssearch_domain = [('name','ilike','property')] # not Case-sensitive
+        print(self.env['property'].search(search_domain))
+        search_domain = [('name','=','property 1'),('state','=','draft')]
+        print(self.env['property'].search(search_domain))
+        search_domain = ['|',('name','=','property 1'),('state','=','draft')]
+        print(self.env['property'].search(search_domain))
+        search_domain = ['!',('name','=','property 1'),('state','=','draft')]
+        #   this means (name != 'property 1' and state == 'draft')
+        print(self.env['property'].search(search_domain))
+
 
 class PropertyLine(models.Model):
     _name = 'property.line'
