@@ -25,6 +25,8 @@
         <field name="arch" type="xml">
             <form create="1" edit="1" delete="1">
                 <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <widget name="web_ribbon" title="Sold" bg_color="text-bg-success" invisible="state != 'sold'"/>
                     <header>
                         <button name="discover_search_domain" type="object" class="btn-primary" string="Discover Search Domain"/>
                         <button name="discover_env_object" type="object" class="btn-primary" string="Discover env object"/>
