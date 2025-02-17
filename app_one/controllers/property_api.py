@@ -37,7 +37,6 @@ class PropertyApi(http.Controller):
             return {
                 "error": "The name field is required.",
             }
-
         try:
             result = request.env["property"].sudo().create(vals)
 
@@ -51,3 +50,24 @@ class PropertyApi(http.Controller):
             return {
                 "error": str(error),
             }
+
+    @http.route("/v1/property/<int:property_id>", methods=["PUT"], type="http", auth="none", csrf=False)
+    def put_property(self, property_id):
+        try:
+            property = request.env["property"].sudo().search([("id", "=", property_id)])
+            if not property:
+                return request.make_json_response({
+                    "error": "The property with this id does not exist.",
+                }, status=400)
+
+            args = request.httprequest.data.decode("utf-8")
+            vals = json.loads(args)
+            property.sudo().write(vals)
+            return request.make_json_response({
+                "message": "Property has been updated successfully",
+            }, status=200)
+        except Exception as error:
+            return request.make_json_response({
+                "error": str(error),
+            }, status=400)
+
