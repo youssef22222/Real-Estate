@@ -1,4 +1,5 @@
 import json
+from urllib.parse import parse_qs
 from odoo import http
 from odoo.http import request
 
@@ -130,6 +131,34 @@ class PropertyApi(http.Controller):
                 'postcode': property.postcode,
                 'date_availability': property.date_availability,
                 'bedrooms': property.bedrooms,
+                'expected_price': property.expected_price,
+            } for property in properties], status=200)
+        except Exception as error:
+            return request.make_json_response({
+                "error": str(error),
+            }, status=400)
+
+    @http.route("/v1/properties/filter", methods=["GET"], type="http", auth="none", csrf=False)
+    def get_properties_with_filter(self):
+        try:
+            params = parse_qs(request.httprequest.query_string.decode("utf-8"))
+            property_domain = [(key, "=", value[0]) for (key, value) in params.items()]
+
+            properties = request.env["property"].sudo().search(property_domain)
+            if not properties:
+                return request.make_json_response({
+                    "error": "No properties found.",
+                }, status=400)
+
+            return request.make_json_response([{
+                'id': property.id,
+                'ref': property.ref,
+                'name': property.name,
+                'description': property.description,
+                'postcode': property.postcode,
+                'date_availability': property.date_availability,
+                'bedrooms': property.bedrooms,
+                'state': property.state,
                 'expected_price': property.expected_price,
             } for property in properties], status=200)
         except Exception as error:
