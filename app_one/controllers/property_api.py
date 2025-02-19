@@ -2,6 +2,7 @@ import json
 from urllib.parse import parse_qs
 from odoo import http
 from odoo.http import request
+from .utility import valid_response, invalid_response
 
 
 class PropertyApi(http.Controller):
@@ -12,22 +13,17 @@ class PropertyApi(http.Controller):
         vals = json.loads(args)
 
         if not vals.get("name"):
-            return request.make_json_response({
-                "error": "The name field is required.",
-            }, status=400)
+            return invalid_response("The name field is required.")
 
         try:
             result = request.env["property"].sudo().create(vals)
 
             if result:
-                return request.make_json_response({
-                    "message": "Property has been created successfully",
+                return valid_response("Property has been created successfully",{
                     "Property id": result.id,
                 }, status=201)
         except Exception as error:
-            return request.make_json_response({
-                "error": str(error),
-            }, status=400)
+            return invalid_response(str(error))
 
     @http.route("/v1/property/json", methods=["POST"], type="json", auth="none", csrf=False)
     def post_property_json(self):
@@ -57,31 +53,23 @@ class PropertyApi(http.Controller):
         try:
             property = request.env["property"].sudo().search([("id", "=", property_id)])
             if not property:
-                return request.make_json_response({
-                    "error": "The property with this id does not exist.",
-                }, status=400)
+                return invalid_response("The property with this id does not exist.")
 
             args = request.httprequest.data.decode("utf-8")
             vals = json.loads(args)
             property.sudo().write(vals)
-            return request.make_json_response({
-                "message": "Property has been updated successfully",
-            }, status=200)
+            return valid_response("Property has been updated successfully",{})
         except Exception as error:
-            return request.make_json_response({
-                "error": str(error),
-            }, status=400)
+            return invalid_response(str(error))
 
     @http.route("/v1/property/<int:property_id>", methods=["GET"], type="http", auth="none", csrf=False)
     def get_property(self, property_id):
         try:
             property = request.env["property"].sudo().search([("id", "=", property_id)])
             if not property:
-                return request.make_json_response({
-                    "error": "The property with this id does not exist.",
-                }, status=400)
+                return invalid_response("The property with this id does not exist.")
 
-            return request.make_json_response({
+            return valid_response("Successfully retrieved property",{
                 'id': property.id,
                 'ref': property.ref,
                 'name': property.name,
@@ -90,40 +78,29 @@ class PropertyApi(http.Controller):
                 'date_availability': property.date_availability,
                 'bedrooms': property.bedrooms,
                 'expected_price': property.expected_price,
-            }, status=200)
+            })
         except Exception as error:
-            return request.make_json_response({
-                "error": str(error),
-            },status=400)
+            return invalid_response(str(error))
 
     @http.route("/v1/property/<int:property_id>", methods=["DELETE"], type="http", auth="none", csrf=False)
     def delete_property(self, property_id):
         try:
             property = request.env["property"].sudo().search([("id", "=", property_id)])
             if not property:
-                return request.make_json_response({
-                    "error": "The property with this id does not exist.",
-                }, status=400)
-
+                return invalid_response("The property with this id does not exist.")
             property.sudo().unlink()
-            return request.make_json_response({
-                'message': 'Property has been deleted successfully',
-            }, status=200)
+            return valid_response("Property has been deleted successfully",{})
         except Exception as error:
-            return request.make_json_response({
-                "error": str(error),
-            }, status=400)
+            return invalid_response(str(error))
 
     @http.route("/v1/properties", methods=["GET"], type="http", auth="none", csrf=False)
     def get_properties(self):
         try:
             properties = request.env["property"].sudo().search([])
             if not properties:
-                return request.make_json_response({
-                    "error": "No properties found.",
-                }, status=400)
+                return invalid_response("No properties found.")
 
-            return request.make_json_response([{
+            return valid_response("Successfully retrieved properties", [{
                 'id': property.id,
                 'ref': property.ref,
                 'name': property.name,
@@ -132,11 +109,9 @@ class PropertyApi(http.Controller):
                 'date_availability': property.date_availability,
                 'bedrooms': property.bedrooms,
                 'expected_price': property.expected_price,
-            } for property in properties], status=200)
+            } for property in properties])
         except Exception as error:
-            return request.make_json_response({
-                "error": str(error),
-            }, status=400)
+            return invalid_response(str(error))
 
     @http.route("/v1/properties/filter", methods=["GET"], type="http", auth="none", csrf=False)
     def get_properties_with_filter(self):
@@ -146,11 +121,9 @@ class PropertyApi(http.Controller):
 
             properties = request.env["property"].sudo().search(property_domain)
             if not properties:
-                return request.make_json_response({
-                    "error": "No properties found.",
-                }, status=400)
+                return invalid_response("No properties found.")
 
-            return request.make_json_response([{
+            return valid_response("Successfully retrieved properties", [{
                 'id': property.id,
                 'ref': property.ref,
                 'name': property.name,
@@ -160,9 +133,7 @@ class PropertyApi(http.Controller):
                 'bedrooms': property.bedrooms,
                 'state': property.state,
                 'expected_price': property.expected_price,
-            } for property in properties], status=200)
+            } for property in properties])
         except Exception as error:
-            return request.make_json_response({
-                "error": str(error),
-            }, status=400)
+            return invalid_response(str(error))
 
