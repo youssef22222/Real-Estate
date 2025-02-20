@@ -1,3 +1,4 @@
+import requests
 from odoo import models,fields,api
 from odoo.exceptions import ValidationError
 from datetime import timedelta
@@ -228,6 +229,29 @@ class Property(models.Model):
         action['res_id'] = self.owner_id.id
         action['views'] = [[view_id,'form']]
         return action
+
+    def test_get_properties_api(self):
+        url = "http://localhost:8069/v1/properties/filter/pagination"
+        payload = {}
+        headers = {}
+        params = {
+            "state": "draft",
+            "garden": True,
+            "page": 2,
+            "limit": 4
+        }
+        try:
+            response = requests.get(url, params=params, headers=headers, data=payload)
+            print(response.url)  # Check the final URL with encoded parameters
+
+            if response.status_code not in range(200, 299):
+                raise ValidationError("EndPoint Call Error")
+            vals = response.json()
+            print(vals)
+        except Exception as error:
+            raise ValidationError(str(error))
+
+
 
 class PropertyLine(models.Model):
     _name = 'property.line'
