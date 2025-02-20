@@ -1,4 +1,5 @@
 import json
+import math
 from urllib.parse import parse_qs
 from odoo import http
 from odoo.http import request
@@ -136,4 +137,48 @@ class PropertyApi(http.Controller):
             } for property in properties])
         except Exception as error:
             return invalid_response(str(error))
+
+    @http.route("/v1/properties/filter/pagination", methods=["GET"], type="http", auth="none", csrf=False)
+    def get_properties_with_filter_and_pagination(self):
+        try:
+            params = parse_qs(request.httprequest.query_string.decode("utf-8"))
+            property_domain = [(key, "=", value[0]) for (key, value) in params.items()
+                if key in request.env["property"].fields_get()]
+
+            page = offset = None
+            limit = 5
+
+            if params.get("page"):
+                page = int(params["page"][0])
+            if params.get("limit"):
+                limit = int(params["limit"][0])
+
+            if page:
+                offset = (page - 1) * limit
+
+            properties = request.env["property"].sudo().search(property_domain, offset=offset, limit=limit, order="id desc")
+            property_count = request.env["property"].sudo().search_count(property_domain)
+
+            if not properties:
+                return invalid_response("No properties found.")
+
+            return valid_response("Successfully retrieved properties", [{
+                'id': property.id,
+                'ref': property.ref,
+                'name': property.name,
+                'description': property.description,
+                'postcode': property.postcode,
+                'date_availability': property.date_availability,
+                'bedrooms': property.bedrooms,
+                'state': property.state,
+                'expected_price': property.expected_price,
+            } for property in properties], {
+                "page no.": page if page else 1,
+                "limit": limit,
+                "no. of pages": math.ceil(property_count / limit) if limit else 1,
+                "no. of records": property_count,
+            })
+        except Exception as error:
+            return invalid_response(str(error))
+
 
