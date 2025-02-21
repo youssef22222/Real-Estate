@@ -181,4 +181,31 @@ class PropertyApi(http.Controller):
         except Exception as error:
             return invalid_response(str(error))
 
+    @http.route("/v1/property/sql", methods=["POST"], type="http", auth="none", csrf=False)
+    def post_property(self):
+        try:
+            args = request.httprequest.data.decode("utf-8")
+            vals = json.loads(args)
+
+            if not vals.get("name"):
+                return invalid_response("The name field is required.")
+
+            cr = request.env.cr
+            columns = ", ".join(vals.keys())
+            values = ", ".join(['%s'] * len(vals))
+
+            query = f"""
+            INSERT INTO property ({columns}) VALUES ({values}) RETURNING id, {columns};
+            """
+
+            cr.execute(query, tuple(vals.values()))
+            result = cr.fetchone()
+
+            if result:
+                return valid_response("Property has been created successfully",{
+                    f"{key}" : result[idx] for idx, key in enumerate(["id"] + list(vals.keys()))
+                }, status=201)
+        except Exception as error:
+            return invalid_response(str(error))
+
 
