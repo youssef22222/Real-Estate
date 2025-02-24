@@ -3,5 +3,25 @@
 <templates xml:space="preserve">
     <t t-name="app_one.ListView">
         <h1>Hello World</h1>
+        <div class="table-responsive table-container">
+            <table class="styled-table table table-sm table-hover tabel-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Postcode</th>
+                        <th>Date Availability</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="state.records" t-as="record" t-key="record.id">
+                        <tr>
+                            <td> <t t-esc="record.name"/> </td>
+                            <td> <t t-esc="record.postcode"/> </td>
+                            <td> <t t-esc="record.date_availability"/> </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
     </t>
 </templates>
