@@ -1,0 +1,36 @@
+<odoo>
+    <!-- These records will be automatically created upon module installation,
+         assisting in configuring necessary settings. -->
+     <data noupdate="1">
+        <!--noupdate="1" will avoid any code updates in these records-->
+        <record id="property_01" model="property">
+            <field name="name">property 1 from data xml</field>
+            <field name="description">desc</field>
+            <field name="postcode">1111</field>
+            <field name="bedrooms">3</field>
+            <field name="date_availability">2025-2-25</field>
+            <field name="garden">True</field>
+            <field name="expected_price">2000</field>
+        </record>
+
+        <record id="property_02" model="property">
+            <field name="name">property 2 from data xml</field>
+            <field name="description">desc</field>
+            <field name="postcode">2222</field>
+            <field name="bedrooms">3</field>
+            <field name="date_availability">2025-2-25</field>
+            <field name="garden">False</field>
+            <field name="expected_price">3000</field>
+        </record>
+
+        <record id="property_03" model="property">
+            <field name="name">property 3 from data xml</field>
+            <field name="description">desc</field>
+            <field name="postcode">3333</field>
+            <field name="bedrooms">3</field>
+            <field name="date_availability">2025-2-25</field>
+            <field name="garden">False</field>
+            <field name="expected_price">3000</field>
+        </record>
+    </data>
+</odoo>
